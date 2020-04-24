@@ -12,7 +12,7 @@ public class Sockets {
         try {
             s = new Socket("raspberrypi", 8000);
             pw = new PrintWriter(s.getOutputStream());
-            pw.write("30");
+            pw.write("80");
             pw.flush();
             pw.close();
             s.close();
