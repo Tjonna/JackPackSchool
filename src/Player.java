@@ -3,15 +3,15 @@ import java.awt.*;
 public class Player {
 
     private GamePanel panel;
-    private int x;
-    private int y;
-    private int width = 50;
-    private int height = 50;
+    int x;
+    int y;
+    int width = 50;
+    int height = 50;
 
-    private double xspeed = x;
-    private double flyspeed = y;
+    double xspeed = x;
+    double flyspeed = y;
 
-    private Rectangle hitBox;
+     Rectangle hitBox;
 
     public boolean keyLeft;
     public boolean keyRight;
@@ -28,16 +28,14 @@ public class Player {
     }
 
     public void set() {
-        if (y >= 1500 || keyRestart) {
-            if(keyRestart){
+        panel.cameraY -= panel.cameraYspeed;
+        if (y >= 1500 + panel.cameraY|| keyRestart) {
+            if (keyRestart) {
                 System.out.println("Restart!");
             } else {
                 System.out.println("Speler is dood!");
             }
-            x = 400;
-            y = 300;
-            xspeed = 0;
-            flyspeed = 0;
+            panel.resetGame();
         }
         //Zorgen dat er geen dubbel op movement komt`
         if (keyLeft && keyRight || !keyLeft && !keyRight) xspeed *= 0.8;
@@ -45,6 +43,7 @@ public class Player {
         else if (keyRight && !keyLeft) xspeed++;
 
 
+        // Snelheid reguleren / niet keihard weg vliegen
         if (xspeed > 0 && xspeed < 0.75) xspeed = 0;
         if (xspeed < 0 && xspeed > -0.75) xspeed = 0;
 
@@ -60,13 +59,19 @@ public class Player {
         if (keyUp) {
             // Kijken of we de grond raken met hitbox)
             hitBox.y++;
-            for (Platform plat : panel.platforms) {
-                if (plat.hitBox.intersects(hitBox)) {
-                    flyspeed = -6;
-                }
-            }
+            flyspeed = -6;
+//            for (Platform plat : panel.platforms) {
+//                if (plat.hitBox.intersects(hitBox)) {
+//                    // -6 is eigenlijk omhoog.
+//                    flyspeed = -6;
+//                }
+//            }
             hitBox.y--;
 
+        } else if (keyDown) {
+            hitBox.y++;
+            flyspeed = +10;
+            hitBox.y--;
         }
 
         flyspeed += 0.3;
@@ -77,7 +82,6 @@ public class Player {
             if (hitBox.intersects(plat.hitBox)) {
                 hitBox.x -= xspeed;
                 while (!plat.hitBox.intersects(hitBox)) hitBox.x += Math.signum(xspeed);
-
                 hitBox.x -= Math.signum(xspeed);
                 xspeed = 0;
                 x = hitBox.x;
@@ -103,5 +107,11 @@ public class Player {
         g.drawRect(x, y, width, height);
         g.setColor(Color.GREEN);
         g.fillRect(x + 1, y + 1, width - 1, height - 1);
+
+        Font f = new Font("Arial", Font.BOLD, 20);
+        g.setFont(f);
+        g.setColor(Color.BLACK);
+        g.drawString("Camera Y: " + panel.cameraY, 100, 100);
+        g.drawString("Camera Y Speed: " + panel.cameraYspeed, 100, 125);
     }
 }

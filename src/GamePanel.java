@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -14,17 +15,21 @@ public class GamePanel extends JPanel {
     Timer gameTimer;
     ArrayList<Platform> platforms = new ArrayList<>();
 
+    int cameraY;
+    int cameraYspeed;
+
 
     public GamePanel() throws InterruptedException {
         player = new Player(400, 300, this);
 
-        generatePlatforms();
+        resetGame();
         gameTimer = new Timer();
         gameTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 // Zet de player posities
                 player.set();
+                for (Platform plat : platforms) plat.set(cameraY);
                 // Teken op de game panel
                 repaint();
             }
@@ -32,18 +37,26 @@ public class GamePanel extends JPanel {
         }, 0, 17);
     }
 
-    private void generatePlatforms() {
-//        for (int i = 50; i < 650; i += 50) {
-//            platforms.add(new Platform(i, 600, 50, 50));
-//        }
+    public void resetGame() {
+        player.x = 400;
+        player.y = 300;
+        player.xspeed = 0;
+        player.flyspeed = 0;
+        cameraY = 150;
+        cameraYspeed = 1;
+        platforms.clear();
 
-        platforms.add(new Platform(50, 600, 600, 50));
-        // Linker kant omhoog voor de kooi kooi
-        platforms.add(new Platform(50, 450, 50, 150));
-        // Rechter kant omhoog voor de kooi
-        platforms.add(new Platform(600, 450, 50, 150));
+        generatePlatforms(50);
+    }
 
-        platforms.add(new Platform(650, 350, 140, 50));
+    private void generatePlatforms(int offset) {
+        int s = 50;
+        Random rand = new Random();
+        int index = rand.nextInt(1);
+
+        if (index == 0) {
+            for (int i = 0; i < 16; i++) platforms.add(new Platform( i * 50, 800, 50, 50, player));
+        }
 
     }
 
