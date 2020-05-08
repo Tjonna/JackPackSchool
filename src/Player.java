@@ -11,13 +11,17 @@ public class Player {
     double xspeed = x;
     double flyspeed = y;
 
-     Rectangle hitBox;
+    Rectangle hitBox;
 
-    public boolean keyLeft;
-    public boolean keyRight;
-    public boolean keyUp;
-    public boolean keyDown;
+    boolean keyLeft;
+    boolean keyRight;
+    boolean keyUp;
+    boolean keyDown;
     boolean keyRestart;
+
+    boolean canFly;
+    long endTime;
+    int deathRange = 1800;
 
     // Locatie van de speler en de panel waar hij geprojecteerd op moet owrden
     public Player(int x, int y, GamePanel panel) {
@@ -28,12 +32,14 @@ public class Player {
     }
 
     public void set() {
-        panel.cameraY -= panel.cameraYspeed;
-        if (y >= 1500 + panel.cameraY|| keyRestart) {
+        if (y >= 900 || y <= -150 || keyRestart) {
             if (keyRestart) {
                 System.out.println("Restart!");
             } else {
                 System.out.println("Speler is dood!");
+                System.out.println("The player was at: " + y);
+                System.out.println("The camera was at: " + panel.cameraY);
+                System.out.println("The player had to be higher than: " + (2000 + panel.cameraY));
             }
             panel.resetGame();
         }
@@ -57,20 +63,21 @@ public class Player {
         hitBox.y = y;
 
         if (keyUp) {
+            if (!canFly) {
+                keyUp = false;
+            } else if (endTime != 0) {
+                if (panel.currentTimer >= endTime) {
+                    System.out.println("Can't fly anymore");
+                    canFly = false;
+                    endTime = 0;
+                }
+            } else {
+                System.out.println("Setting end timer to 1 secw");
+                endTime = panel.currentTimer + 1500;
+            }
             // Kijken of we de grond raken met hitbox)
             hitBox.y++;
             flyspeed = -6;
-//            for (Platform plat : panel.platforms) {
-//                if (plat.hitBox.intersects(hitBox)) {
-//                    // -6 is eigenlijk omhoog.
-//                    flyspeed = -6;
-//                }
-//            }
-            hitBox.y--;
-
-        } else if (keyDown) {
-            hitBox.y++;
-            flyspeed = +10;
             hitBox.y--;
         }
 
@@ -80,6 +87,7 @@ public class Player {
         hitBox.x += xspeed;
         for (Platform plat : panel.platforms) {
             if (hitBox.intersects(plat.hitBox)) {
+                canFly = true;
                 hitBox.x -= xspeed;
                 while (!plat.hitBox.intersects(hitBox)) hitBox.x += Math.signum(xspeed);
                 hitBox.x -= Math.signum(xspeed);
@@ -89,17 +97,38 @@ public class Player {
         }
 
         // Verticaal collision
+//        hitBox.y += flyspeed;
+//        for (Platform plat : panel.platforms) {
+//            if (hitBox.intersects(plat.hitBox)) {
+//                canFly = true;
+//                hitBox.y -= flyspeed;
+//
+//                while (!plat.hitBox.intersects(hitBox)) hitBox.y += Math.signum(flyspeed);
+//                hitBox.y -= Math.signum(flyspeed);
+//
+//                flyspeed = 0;
+//                y = hitBox.y;
+//            }
+//        }
         hitBox.y += flyspeed;
         for (Platform plat : panel.platforms) {
             if (hitBox.intersects(plat.hitBox)) {
+                canFly = true;
                 hitBox.y -= flyspeed;
                 while (!plat.hitBox.intersects(hitBox)) hitBox.y += Math.signum(flyspeed);
-
                 hitBox.y -= Math.signum(flyspeed);
                 flyspeed = 0;
                 y = hitBox.y;
             }
         }
+
+        for (int i = 0; i < panel.fuels.size(); i++) {
+            if (hitBox.intersects(panel.fuels.get(i).hitBox)) {
+                panel.fuels.remove(i);
+                System.out.println("POWERED UP!");
+            }
+        }
+
     }
 
     public void draw(Graphics2D g) {
@@ -113,5 +142,7 @@ public class Player {
         g.setColor(Color.BLACK);
         g.drawString("Camera Y: " + panel.cameraY, 100, 100);
         g.drawString("Camera Y Speed: " + panel.cameraYspeed, 100, 125);
+        g.drawString("Player Y: " + y, 100, 150);
+
     }
 }
