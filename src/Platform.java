@@ -31,9 +31,9 @@ public class Platform {
         g.fillRect(x + 1, y + 1, width - 2, height - 2);
     }
 
-    public int set(int cameraY) {
-        y = startY - cameraY;
-        if (!hitBox.intersects(player.hitBox))  hitBox.y = y;
+    public int set(int playerY) {
+        y = startY + playerY;
+        if (!hitBox.intersects(player.hitBox)) hitBox.y = y;
 
         return y;
     }

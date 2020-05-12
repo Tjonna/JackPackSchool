@@ -26,14 +26,14 @@ public class Fuel {
 
     public void draw(Graphics2D g) {
         g.setColor(Color.BLACK);
-        g.drawOval(x, y, width -20, height - 20);
+        g.drawOval(x, y, width - 20, height - 20);
         g.setColor(Color.RED);
         g.fillOval(x + 1, y + 1, width - 22, height - 22);
     }
 
-    public int set(int cameraY) {
-        y = startY - cameraY;
-        if (!hitBox.intersects(player.hitBox))  hitBox.y = y;
+    public int set(int playerY) {
+        y = startY + playerY;
+        if (!hitBox.intersects(player.hitBox)) hitBox.y = y;
 
         return y;
     }

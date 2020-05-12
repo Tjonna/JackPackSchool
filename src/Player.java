@@ -32,16 +32,24 @@ public class Player {
     }
 
     public void set() {
-        if (y >= 900 || y <= -150 || keyRestart) {
+
+        // Ik zet de player areas waar je dood kan gaan en de reset knop
+        if (y >= 1000 || y <= -250 || keyRestart) {
             if (keyRestart) {
                 System.out.println("Restart!");
             } else {
                 System.out.println("Speler is dood!");
                 System.out.println("The player was at: " + y);
-                System.out.println("The camera was at: " + panel.cameraY);
-                System.out.println("The player had to be higher than: " + (2000 + panel.cameraY));
+                // System.out.println("The camera was at: " + panel.cameraY);
+                // System.out.println("The player had to be higher than: " + (2000 + panel.cameraY));
             }
             panel.resetGame();
+        }
+        // Borders aan de X as
+        if (x < 5) {
+            x = 0;
+        } else if (x > 745) {
+            x = 745;
         }
         //Zorgen dat er geen dubbel op movement komt`
         if (keyLeft && keyRight || !keyLeft && !keyRight) xspeed *= 0.8;
@@ -64,6 +72,10 @@ public class Player {
 
         if (keyUp) {
             if (!canFly) {
+                System.out.println("Can't fly!");
+                keyUp = false;
+            } else if (panel.jetPackFuel <= 0) {
+                System.out.println("Out of fuel");
                 keyUp = false;
             } else if (endTime != 0) {
                 if (panel.currentTimer >= endTime) {
@@ -76,6 +88,7 @@ public class Player {
                 endTime = panel.currentTimer + 1500;
             }
             // Kijken of we de grond raken met hitbox)
+            panel.jetPackFuel -= 0.1;
             hitBox.y++;
             flyspeed = -6;
             hitBox.y--;
@@ -87,8 +100,11 @@ public class Player {
         hitBox.x += xspeed;
         for (Platform plat : panel.platforms) {
             if (hitBox.intersects(plat.hitBox)) {
+                // Tijdens de intersectie:
                 canFly = true;
                 hitBox.x -= xspeed;
+
+                // Na de intersectie, dus nu niet meer.
                 while (!plat.hitBox.intersects(hitBox)) hitBox.x += Math.signum(xspeed);
                 hitBox.x -= Math.signum(xspeed);
                 xspeed = 0;
@@ -97,35 +113,37 @@ public class Player {
         }
 
         // Verticaal collision
-//        hitBox.y += flyspeed;
-//        for (Platform plat : panel.platforms) {
-//            if (hitBox.intersects(plat.hitBox)) {
-//                canFly = true;
-//                hitBox.y -= flyspeed;
-//
-//                while (!plat.hitBox.intersects(hitBox)) hitBox.y += Math.signum(flyspeed);
-//                hitBox.y -= Math.signum(flyspeed);
-//
-//                flyspeed = 0;
-//                y = hitBox.y;
-//            }
-//        }
         hitBox.y += flyspeed;
         for (Platform plat : panel.platforms) {
             if (hitBox.intersects(plat.hitBox)) {
-                canFly = true;
+                // Tijdens de intersectie:
                 hitBox.y -= flyspeed;
+                if (hitBox.intersects(new Rectangle(plat.hitBox.x, plat.hitBox.y - 20, 50, 5))) endTime = 0;
+                canFly = true;
+
+                // Na de intersectie, dus nu niet meer.
                 while (!plat.hitBox.intersects(hitBox)) hitBox.y += Math.signum(flyspeed);
                 hitBox.y -= Math.signum(flyspeed);
                 flyspeed = 0;
                 y = hitBox.y;
             }
+
+
+            // Na de intersectie, dus nu niet meer.
+//
+//
+//
+//                flyspeed = 0;
+//
         }
 
         for (int i = 0; i < panel.fuels.size(); i++) {
             if (hitBox.intersects(panel.fuels.get(i).hitBox)) {
+                // Zodra fuel gehit wordt, haal m uit de array list. Dus ook niet meer drawen.
                 panel.fuels.remove(i);
                 System.out.println("POWERED UP!");
+                panel.jetPackFuel += 100;
+                panel.score += 5;
             }
         }
 
@@ -140,9 +158,13 @@ public class Player {
         Font f = new Font("Arial", Font.BOLD, 20);
         g.setFont(f);
         g.setColor(Color.BLACK);
-        g.drawString("Camera Y: " + panel.cameraY, 100, 100);
-        g.drawString("Camera Y Speed: " + panel.cameraYspeed, 100, 125);
+        // g.drawString("Camera Y: " + panel.cameraY, 100, 100);
+        // g.drawString("Camera Y Speed: " + panel.cameraYspeed, 100, 125);
         g.drawString("Player Y: " + y, 100, 150);
+        g.drawString("Player X: " + x, 100, 170);
+        g.drawString("Score: " + panel.score, 100, 190);
+        g.drawString("Fuel: " + panel.jetPackFuel, 100, 210);
+
 
     }
 }

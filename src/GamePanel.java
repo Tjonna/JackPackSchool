@@ -13,30 +13,44 @@ public class GamePanel extends JPanel {
     ArrayList<Platform> platforms = new ArrayList<>();
     ArrayList<Fuel> fuels = new ArrayList<>();
 
-    int cameraY;
-    int cameraYspeed;
-    int generateTerrainTreshold = 1600;
     int offset;
 
     long startTimer, currentTimer;
+    int differentiate = 0;
+
+    int score;
+    int jetPackFuel;
 
 
     public GamePanel() throws InterruptedException {
-        player = new Player(400, 150, this);
+        player = new Player(400, 0, this);
 
         resetGame();
         gameTimer = new Timer();
         gameTimer.schedule(new TimerTask() {
             @Override
             public void run() {
+                if (jetPackFuel > 150) {
+                    jetPackFuel = 150;
+                } else if (jetPackFuel < 0) {
+                    jetPackFuel = 0;
+                }
+
+                if (player.y <= 0) {
+                    differentiate += 800;
+                    for (Platform plat : platforms) plat.set(differentiate);
+                    for (Fuel fuel : fuels) fuel.set(differentiate);
+                    player.y = 750;
+                    score += 10;
+                }
                 // Dit is de game loop
                 // Dit is voor de game generation, gebaseerd op vorige platform hoogte en vorig camera hoogte
-                if (cameraY - platforms.get(platforms.size() - 1).y <= generateTerrainTreshold) {
-                    offset -= 400;
-                    System.out.println(platforms.size());
-                    generatePlatforms(offset);
-                    generateTerrainTreshold -= 100;
-                }
+//                if (cameraY - (platforms.get(platforms.size() - 1).y) <= generateTerrainTreshold) {
+//                    System.out.println("Should generate");
+//                    offset -= 400;
+//                    generatePlatforms(offset);
+//                    generateTerrainTreshold -= 100;
+//                }
                 /* Aangezien de camera sneller gaat dan het poppetje en de scherm, wil ik het getal evenwijdig aan mekaar laten gaan. Ook al kan ik er geen
                  goede wiskundige berekening er voor vinden, heb ik maar een lineaire vergelijking gedaan die altijd op X: 900 van het scherm blijft.
                 (int) (cameraY / -1000000000) + 990;
@@ -46,17 +60,13 @@ public class GamePanel extends JPanel {
                  Daardoor is deathRange overbodig en heb ik gewoon y >= 900  || y <= 250 ingevuld
 
                  */
-                // Laat de camera verticaal bewegen
-                cameraY -= cameraYspeed;
                 // cameraYspeed = (int) ((cameraYspeed * (currentTimer / 1000))) + 1;
                 // De tijd in milliseconde bijhouden
                 currentTimer = System.currentTimeMillis() - startTimer;
-                // Camera versnelling door de game heen
-                // cameraYspeed = (int) (cameraYspeed * ((currentTimer / 10000) + 1));
-                // Zet de player posities
+                // Zet de player positiesrr
                 player.set();
-                for (Platform plat : platforms) plat.set(cameraY);
-                for (Fuel fuel : fuels) fuel.set(cameraY);
+                //    for (Platform plat : platforms) plat.set();
+                //   for (Fuel fuel : fuels) fuel.set();
                 // Teken op de game panel
                 repaint();
             }
@@ -66,30 +76,31 @@ public class GamePanel extends JPanel {
 
     public void resetGame() {
         player.x = 400;
-        player.y = 150;
+        player.y = 800;
         player.xspeed = 0;
         player.flyspeed = 0;
-        cameraY = -500;
-        // Camera begin speed, wordt vermeerderd laatste tijd
-        cameraYspeed = 1;
+        jetPackFuel = 150;
         // Even alles weghalen uit de arrayList , zodat er geen platformen nog  bestaan van vorige game
         platforms.clear();
         fuels.clear();
         // Begin platform
-        platforms.add(new Platform(0, 200, 800, 50, player));
-        // Begin tijd zetten , zodat we die later van mekaar af kunnen halen
-        generateTerrainTreshold = 1600;
-        offset = 0;
+        for (int i = 0; i < 16; i++) platforms.add(new Platform(i * 50, 850, 50, 50, player));
+        // Offset tussen de platform generatie
+        offset = 250;
+        // We beginnen bij 0 voor differentiate.
+        differentiate = 0;
 
         startTimer = System.currentTimeMillis();
-        //generatePlatforms(offset);
+        for (int i = 0; i < 30; i++) {
+            generatePlatforms(offset);
+            offset -= 250;
+        }
     }
 
     private void generatePlatforms(int offset) {
         int s = 50;
         Random rand = new Random();
         int index = rand.nextInt(3);
-
         if (index == 0) {
             for (int i = 0; i < 6; i++) platforms.add(new Platform(i * 50, offset, s, s, player));
         } else if (index == 1) {
@@ -104,9 +115,9 @@ public class GamePanel extends JPanel {
     private void generateJetFuel() {
         Random rand = new Random();
         int index = rand.nextInt(platforms.size());
-        int spawnLocationY = platforms.get(index).y - 20;
+        int spawnLocationY = platforms.get(index).y - 35;
         if (spawnLocationY < player.y && index != 1) {
-            fuels.add(new Fuel(platforms.get(index).x, spawnLocationY, 50, 50, player));
+            fuels.add(new Fuel(platforms.get(index).x + 10, spawnLocationY, 50, 50, player));
         }
     }
 
@@ -122,7 +133,7 @@ public class GamePanel extends JPanel {
     }
 
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyChar() == 'w' && player.canFly) {
+        if (e.getKeyChar() == 'w' && player.canFly && jetPackFuel > 0) {
             player.keyUp = true;
         }
         if (e.getKeyChar() == 'a') {
