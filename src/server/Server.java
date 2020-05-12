@@ -17,7 +17,6 @@ public class Server {
         String fromclient;
         ServerSocket Server = new ServerSocket(5000);
         System.out.println("TCPServer Waiting for client on port 5000");
-
         while (true) {
             Socket connected = Server.accept();
             System.out.println(" THE CLIENT" + " " + connected.getInetAddress() + ":" + connected.getPort() + " IS CONNECTED ");
