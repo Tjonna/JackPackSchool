@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -20,6 +22,8 @@ public class GamePanel extends JPanel {
 
     int score;
     int jetPackFuel;
+
+
 
 
     public GamePanel() throws InterruptedException {
@@ -91,7 +95,7 @@ public class GamePanel extends JPanel {
         differentiate = 0;
 
         startTimer = System.currentTimeMillis();
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 10; i++) {
             generatePlatforms(offset);
             offset -= 250;
         }
@@ -127,9 +131,30 @@ public class GamePanel extends JPanel {
 
         Graphics2D gtd = (Graphics2D) g;
 
-        player.draw(gtd);
-        for (Platform plat : platforms) plat.draw(gtd);
-        for (Fuel fuel : fuels) fuel.draw(gtd);
+        try {
+            player.draw(gtd);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(platforms != null) {
+            for (Platform plat : platforms) {
+                try {
+                    plat.draw(gtd);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if(fuels != null) {
+        for (Fuel fuel : fuels) {
+            try {
+                fuel.draw(gtd);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        }
     }
 
     public void keyPressed(KeyEvent e) {

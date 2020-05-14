@@ -1,4 +1,9 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
 
 public class Player {
 
@@ -22,6 +27,8 @@ public class Player {
     boolean canFly;
     long endTime;
     int deathRange = 1800;
+
+    BufferedImage image;
 
     // Locatie van de speler en de panel waar hij geprojecteerd op moet owrden
     public Player(int x, int y, GamePanel panel) {
@@ -149,12 +156,17 @@ public class Player {
 
     }
 
-    public void draw(Graphics2D g) {
-        g.setColor(Color.BLACK);
-        g.drawRect(x, y, width, height);
-        g.setColor(Color.GREEN);
-        g.fillRect(x + 1, y + 1, width - 1, height - 1);
+    public void draw(Graphics2D g) throws IOException {
+        // Player:
+        image = ImageIO.read(new File("src/resources/jackpackondepix.png"));
+        g.drawImage(image, x, y,  null);
+//        g.setColor(Color.BLACK);
+//        g.drawRect(x, y, width, height);
+//        g.setColor(Color.GREEN);
+//        g.fillRect(x + 1, y + 1, width - 1, height - 1);
 
+
+        // Text in the game:
         Font f = new Font("Arial", Font.BOLD, 20);
         g.setFont(f);
         g.setColor(Color.BLACK);
@@ -164,6 +176,8 @@ public class Player {
         g.drawString("Player X: " + x, 100, 170);
         g.drawString("Score: " + panel.score, 100, 190);
         g.drawString("Fuel: " + panel.jetPackFuel, 100, 210);
+
+
 
 
     }

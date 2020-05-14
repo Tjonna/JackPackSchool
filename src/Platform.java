@@ -1,4 +1,8 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Platform {
 
@@ -12,6 +16,8 @@ public class Platform {
 
     Rectangle hitBox;
 
+    BufferedImage image;
+
     public Platform(int x, int y, int width, int height, Player player) {
 
         this.x = x;
@@ -24,11 +30,13 @@ public class Platform {
         hitBox = new Rectangle(x, y, width, height);
     }
 
-    public void draw(Graphics2D g) {
-        g.setColor(Color.BLACK);
-        g.drawRect(x, y, width, height);
-        g.setColor(Color.YELLOW);
-        g.fillRect(x + 1, y + 1, width - 2, height - 2);
+    public void draw(Graphics2D g) throws IOException {
+        image = ImageIO.read(new File("src/resources/plat_platform.png"));
+        g.drawImage(image, x, y,  null);
+//        g.setColor(Color.BLACK);
+//        g.drawRect(x, y, width, height);
+//        g.setColor(Color.YELLOW);
+//        g.fillRect(x + 1, y + 1, width - 2, height - 2);
     }
 
     public int set(int playerY) {
