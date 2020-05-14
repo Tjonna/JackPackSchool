@@ -37,8 +37,8 @@ public class Server{
                     System.out.println("RECIEVED:" + fromclient);
                     pw.write("40;1");
                     pw.flush();
-                    System.out.println("RECIEVED:" + fromclient);
-                } catch (NullPointerException e) {
+                    Thread.sleep(300);
+                } catch (NullPointerException | InterruptedException e) {
                     e.printStackTrace();
                     System.out.println("reeee");
                 }

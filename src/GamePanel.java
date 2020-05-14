@@ -20,6 +20,9 @@ public class GamePanel extends JPanel {
 
     long startTimer, currentTimer;
     int differentiate = 0;
+    int x;
+    int y;
+    int enter;
 
     int score;
     int jetPackFuel;
@@ -52,11 +55,12 @@ public class GamePanel extends JPanel {
                 if(loopcount == 11) {
                     try {
                         s.Run(2,jetPackFuel);
-                        client = s.fromclient;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     loopcount = 0;
+                    client = s.fromclient;
+                    analysejoystick();
                 }
                 else{
                     loopcount+=1;
@@ -190,36 +194,61 @@ public class GamePanel extends JPanel {
 
     }
     public void analysejoystick() {
-        String[] parts = client.split(";");
-        if (parts[1]=="1") {
-            player.keyUp = true;
-        }
+        if (!(client == null || client.isEmpty())) {
+            System.out.println("omfg");
+            System.out.println(client.length());
+            String[] parts = client.split(";");
+            x = Integer.parseInt(parts[0]);
+            System.out.println(x);
+            y = Integer.parseInt(parts[1]);
+            System.out.println(y);
+            enter = Integer.parseInt(parts[2]);
+            System.out.println(enter);
+            if (y == 1) {
+                player.keyUp = true;
+            }
+            else{player.keyUp = false;}
+            if (y == -1) {
+                player.keyDown = true;
+            }
+            else{player.keyDown = false;}
+            if (x == 1) {
+                player.keyRight = true;
+            }
+            else{player.keyRight = false;}
+            if (x == -1) {
+                player.keyLeft = true;
+            }
+            else{player.keyLeft = false;}
+//            if (parts[1] == "1") {
+//                player.keyUp = true;
+//            } else {
+//                player.keyUp = false;
+//            }
+//            System.out.println("aaa");
+//            if (parts[1] == "-1") {
+//                player.keyDown = true;
+//            } else {
+//                player.keyDown = false;
+//            }
+//            if (parts[0] == "-1") {
+//                player.keyLeft = true;
+//            } else {
+//                player.keyLeft = false;
+//            }
+//            if (parts[0] == "1") {
+//                player.keyRight = true;
+//            } else {
+//                player.keyRight = false;
+//            }
+//            if (parts[3] == "1") {
+//                player.keyRestart = true;
+//            } else {
+//                player.keyRestart = false;
+//            }
+            }
         else{
-            player.keyUp = false;
-        }
-        if (parts[1]=="-1") {
-            player.keyDown = true;
-        }
-        else{
-            player.keyDown = false;
-        }
-        if (parts[0]=="-1") {
-            player.keyLeft = true;
-        }
-        else {
-            player.keyLeft = false;
-        }
-        if (parts[0]=="1") {
-            player.keyRight = true;
-        }
-        else {
-            player.keyRight = false;
-        }
-        if (parts[3]=="1") {
-            player.keyRestart = true;
-        }
-        else {
-            player.keyRestart = false;
+            System.out.println("sdf");
         }
     }
 
