@@ -1,3 +1,4 @@
+import javax.print.DocFlavor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -14,7 +15,7 @@ public class GamePanel extends JPanel {
     Timer gameTimer;
     ArrayList<Platform> platforms = new ArrayList<>();
     ArrayList<Fuel> fuels = new ArrayList<>();
-
+    static Server s = new Server();
     int offset;
 
     long startTimer, currentTimer;
@@ -22,13 +23,14 @@ public class GamePanel extends JPanel {
 
     int score;
     int jetPackFuel;
-
+    int loopcount;
+    String client = "0;0;0";
 
 
 
     public GamePanel() throws InterruptedException {
         player = new Player(400, 0, this);
-
+        loopcount=1;
         resetGame();
         gameTimer = new Timer();
         gameTimer.schedule(new TimerTask() {
@@ -46,6 +48,18 @@ public class GamePanel extends JPanel {
                     for (Fuel fuel : fuels) fuel.set(differentiate);
                     player.y = 750;
                     score += 10;
+                }
+                if(loopcount == 11) {
+                    try {
+                        s.Run(2,jetPackFuel);
+                        client = s.fromclient;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    loopcount = 0;
+                }
+                else{
+                    loopcount+=1;
                 }
                 // Dit is de game loop
                 // Dit is voor de game generation, gebaseerd op vorige platform hoogte en vorig camera hoogte
@@ -175,6 +189,40 @@ public class GamePanel extends JPanel {
         }
 
     }
+    public void analysejoystick() {
+        String[] parts = client.split(";");
+        if (parts[1]=="1") {
+            player.keyUp = true;
+        }
+        else{
+            player.keyUp = false;
+        }
+        if (parts[1]=="-1") {
+            player.keyDown = true;
+        }
+        else{
+            player.keyDown = false;
+        }
+        if (parts[0]=="-1") {
+            player.keyLeft = true;
+        }
+        else {
+            player.keyLeft = false;
+        }
+        if (parts[0]=="1") {
+            player.keyRight = true;
+        }
+        else {
+            player.keyRight = false;
+        }
+        if (parts[3]=="1") {
+            player.keyRestart = true;
+        }
+        else {
+            player.keyRestart = false;
+        }
+    }
+
 
     public void keyReleased(KeyEvent e) {
         if (e.getKeyChar() == 'w') {

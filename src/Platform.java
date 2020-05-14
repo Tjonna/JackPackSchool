@@ -31,7 +31,7 @@ public class Platform {
     }
 
     public void draw(Graphics2D g) throws IOException {
-        image = ImageIO.read(new File("src/resources/plat_platform.png"));
+        image = ImageIO.read(new File("src/resources/platform.png"));
         g.drawImage(image, x, y,  null);
 //        g.setColor(Color.BLACK);
 //        g.drawRect(x, y, width, height);

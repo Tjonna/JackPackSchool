@@ -5,7 +5,7 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
-public class Player {
+public class Player{
 
     private GamePanel panel;
     int x;
