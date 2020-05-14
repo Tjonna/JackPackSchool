@@ -50,12 +50,12 @@ public class Server{
                 fromclient = inFromClient.readLine();
                 String[] parts = fromclient.split(";");
                 System.out.println(amount);
-                System.out.println("RECIEVEDa:" + fromclient);
+                System.out.println("RECIEVED:" + fromclient);
                 pw.write(amount+";1");
                 pw.flush();
             } catch (NullPointerException e) {
                 e.printStackTrace();
-                System.out.println("reeee");
+                System.out.println("geen connectie");
             }
         }
 }

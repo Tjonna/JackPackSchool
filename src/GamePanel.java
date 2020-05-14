@@ -204,7 +204,7 @@ public class GamePanel extends JPanel {
             System.out.println(y);
             enter = Integer.parseInt(parts[2]);
             System.out.println(enter);
-            if (y == 1) {
+            if (y == 1 && player.canFly && jetPackFuel > 0) {
                 player.keyUp = true;
             }
             else{player.keyUp = false;}
@@ -220,6 +220,10 @@ public class GamePanel extends JPanel {
                 player.keyLeft = true;
             }
             else{player.keyLeft = false;}
+            if (enter == 1) {
+                player.keyRestart = true;
+            }
+            else{player.keyRestart = false;}
 //            if (parts[1] == "1") {
 //                player.keyUp = true;
 //            } else {
