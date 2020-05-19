@@ -47,6 +47,9 @@ public class GamePanel extends JPanel {
                     player.y = 750;
                     score += 10;
                 }
+                if(platforms.get(platforms.size() - 3).hitBox.intersects(player.hitBox) || platforms.get(platforms.size() - 2).hitBox.intersects(player.hitBox)|| platforms.get(platforms.size() - 1).hitBox.intersects(player.hitBox)){
+                    System.out.println("Should generate new platforms now.");
+                }
                 // Dit is de game loop
                 // Dit is voor de game generation, gebaseerd op vorige platform hoogte en vorig camera hoogte
 //                if (cameraY - (platforms.get(platforms.size() - 1).y) <= generateTerrainTreshold) {

@@ -11,7 +11,7 @@ public class Player {
     int x;
     int y;
     int width = 50;
-    int height = 50;
+    int height = 40;
 
     double xspeed = x;
     double flyspeed = y;
@@ -158,8 +158,13 @@ public class Player {
 
     public void draw(Graphics2D g) throws IOException {
         // Player:
-        image = ImageIO.read(new File("src/resources/jackpackondepix.png"));
-        g.drawImage(image, x, y,  null);
+        if(keyUp) {
+            image = ImageIO.read(new File("src/resources/on.png"));
+            g.drawImage(image, x, y, null);
+        } else {
+            image = ImageIO.read(new File("src/resources/off.png"));
+            g.drawImage(image, x, y, null);
+        }
 //        g.setColor(Color.BLACK);
 //        g.drawRect(x, y, width, height);
 //        g.setColor(Color.GREEN);
