@@ -23,6 +23,7 @@ public class Player {
     boolean keyUp;
     boolean keyDown;
     boolean keyRestart;
+    boolean keyGraphics;
 
     boolean canFly;
     long endTime;
@@ -77,6 +78,7 @@ public class Player {
         hitBox.x = x;
         hitBox.y = y;
 
+        // Dit is de jetpack controller, hij doet alle checks of de jetpack aan mag / speler omhoog mag ja of nee. Timer na gebruik, fuel
         if (keyUp) {
             if (!canFly) {
                 System.out.println("Can't fly!");
@@ -103,7 +105,7 @@ public class Player {
 
         flyspeed += 0.3;
 
-        // Horizontaal collision
+        // Horizontaal collision handler. Hij kijkt of je collide met een hitbox en zet je terug met dezelfde xspeed als normaal.
         hitBox.x += xspeed;
         for (Platform plat : panel.platforms) {
             if (hitBox.intersects(plat.hitBox)) {
@@ -119,7 +121,7 @@ public class Player {
             }
         }
 
-        // Verticaal collision
+        // Verticaal collision handler. Hij kijkt of je collide met een hitbox en zet je terug met dezelfde flyspeed als normaal.
         hitBox.y += flyspeed;
         for (Platform plat : panel.platforms) {
             if (hitBox.intersects(plat.hitBox)) {
@@ -135,15 +137,9 @@ public class Player {
                 y = hitBox.y;
             }
 
-
-            // Na de intersectie, dus nu niet meer.
-//
-//
-//
-//                flyspeed = 0;
-//
         }
 
+        // Code scant alle fuels en kijkt of er ge-intersect wordt , verwijderd fuel uit de arrayList en voegt score toe en fuel meter bijvullen met 100.
         for (int i = 0; i < panel.fuels.size(); i++) {
             if (hitBox.intersects(panel.fuels.get(i).hitBox)) {
                 // Zodra fuel gehit wordt, haal m uit de array list. Dus ook niet meer drawen.
@@ -158,7 +154,7 @@ public class Player {
 
     public void draw(Graphics2D g) throws IOException {
         // Player:
-        if(keyUp) {
+        if (keyUp) {
             image = ImageIO.read(new File("src/resources/on.png"));
             g.drawImage(image, x, y, null);
         } else {
@@ -181,8 +177,6 @@ public class Player {
         g.drawString("Player X: " + x, 100, 170);
         g.drawString("Score: " + panel.score, 100, 190);
         g.drawString("Fuel: " + panel.jetPackFuel, 100, 210);
-
-
 
 
     }

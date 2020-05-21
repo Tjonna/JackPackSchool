@@ -31,7 +31,10 @@ public class Fuel {
 
     public void draw(Graphics2D g) throws IOException {
         image = ImageIO.read(new File("src/resources/jerrycan.png"));
-        g.drawImage(image, x, y,  null);
+        g.drawImage(image, x, y, null);
+
+        // Oude graphics:
+
 //        g.setColor(Color.BLACK);
 //        g.drawOval(x, y, width - 20, height - 20);
 //        g.setColor(Color.RED);
