@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 public class Platform {
 
@@ -11,6 +12,8 @@ public class Platform {
     int width;
     int height;
     int startY;
+
+    boolean hasFuel = false;
 
     Player player;
 
@@ -28,15 +31,29 @@ public class Platform {
         this.player = player;
 
         hitBox = new Rectangle(x, y, width, height);
+
+        Random rand = new Random();
+        int index = rand.nextInt(5);
+        if (index == 4) {
+            System.out.println("has fuel is true");
+            hasFuel = true;
+        } else {
+            System.out.println("has fuel is false");
+            hasFuel = false;
+        }
     }
 
     public void draw(Graphics2D g) throws IOException {
-        image = ImageIO.read(new File("src/resources/platform.png"));
-        g.drawImage(image, x, y,  null);
-//        g.setColor(Color.BLACK);
-//        g.drawRect(x, y, width, height);
-//        g.setColor(Color.YELLOW);
-//        g.fillRect(x + 1, y + 1, width - 2, height - 2);
+        // Zo kan je de sprite van de platformen aanzetten
+        if (player.keyGraphics) {
+            image = ImageIO.read(new File("src/resources/platform.png"));
+            g.drawImage(image, x, y, null);
+        } else {
+            g.setColor(Color.BLACK);
+            g.drawRect(x, y, width, height);
+            g.setColor(Color.YELLOW);
+            g.fillRect(x + 1, y + 1, width - 2, height - 2);
+        }
     }
 
     public int set(int playerY) {
@@ -45,4 +62,6 @@ public class Platform {
 
         return y;
     }
+
+
 }

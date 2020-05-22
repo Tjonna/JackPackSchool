@@ -28,7 +28,7 @@ public class MainFrame extends JFrame {
         gamePanel.setSize(getSize());
         // Toevoegen van game paneel
         add(gamePanel);
-        gamePanel.setBackground(Color.LIGHT_GRAY);
+        gamePanel.setBackground(Color.GRAY);
         gamePanel.setVisible(true);
         addKeyListener(new KeyChecker(gamePanel));
     }
