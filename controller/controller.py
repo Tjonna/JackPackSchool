@@ -5,9 +5,11 @@ from sense_hat import SenseHat
 sense = SenseHat()
 from sense_hat import SenseHat
 sense = SenseHat()
+#regelt het starten van de connectie
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect(("169.254.14.69", 5000))
 client_socket.send("connected"+"\n")
+#maakt van nummer zelfde format als de afbeeldingen
 def makeimg(var):
 	lengte = len(var)
 	multiplier = 4-lengte
@@ -16,6 +18,7 @@ def makeimg(var):
 	print (nullen)
 	return(nullen+var+".png")
 def checkdirection():
+    #haalt data van rotatie en joystick op
 	richting = ""
 	acceleration = sense.get_accelerometer_raw()
 	x = acceleration['x']
@@ -40,22 +43,14 @@ def checkdirection():
 			print ("trigger activated")
 		  # Check which direction
 			if event.direction == "up":
-				richting = (richting+"up")
-				print("omhoog")
 				y = "1"
 			if event.direction == "down":
 				y = "-1"
-				richting = (richting+"down")
-			if event.direction == "left": 
-				richting = (richting+"left")
-			if event.direction == "right":
-				richting = (richting+"right")
 			if event.direction == "middle":
-				richting = (richting+"Enter")
 				enter = "1"
-	print (richting)
 	return (xsend+";"+y+";"+enter)
 def tic():
+    #ontvangt data van de game en past de sense hat aan
 	while 1:
 		data = client_socket.recv(1024)
 		print(data)
@@ -83,6 +78,7 @@ def tac():
 	print (r)
 	client_socket.send(r+"\n")
 while True:
+    #tic =rec, tac = send
 	tic()
 	tac()
 	
