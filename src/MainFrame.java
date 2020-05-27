@@ -31,15 +31,12 @@ public class MainFrame extends JFrame {
         gamePanel.setBackground(Color.GRAY);
         gamePanel.setVisible(true);
         addKeyListener(new KeyChecker(gamePanel));
+
     }
 
 
     public void openFrame() {
         setVisible(true);
-    }
-
-    public void closeFrame() {
-        setVisible(false);
     }
 
 }

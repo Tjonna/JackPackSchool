@@ -5,17 +5,17 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
+// Gemaakt door Julian
 public class Server{
-    public static ServerSocket Server;
-    public static PrintWriter pw;
-    public static int cyclenr;
-    public static BufferedReader inFromClient;
-    public String fromclient;
-    public static String amount;
+     static ServerSocket Server;
+     static PrintWriter pw;
+     static int cyclenr;
+     static BufferedReader inFromClient;
+     String fromclient;
+     static String amount;
 
 
-    public void Run(int cycle,int jetPackFuel) throws IOException {
+    void Run(int cycle, int jetPackFuel) throws IOException {
         amount = Integer.toString((int)(jetPackFuel/1.5));
         if (cycle == 1) {
             Server = new ServerSocket(5000);
