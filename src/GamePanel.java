@@ -23,7 +23,7 @@ public class GamePanel extends JPanel {
     int x;
     int y;
     int enter;
-
+    int statusindicator;
     int score;
     int jetPackFuel;
     int loopcount;
@@ -83,13 +83,21 @@ public class GamePanel extends JPanel {
                 }
 
 
+                //checkt of er al 10 frames voorbij zijn, om haperingen te voorkomen
+                //Julian
                 if(loopcount == 11) {
+                    //laat animatie afspelen als de speler restart of dood is
+                    if(statusindicator == 1) {
+                        Server.status = "0";
+                        statusindicator = 0;
+                    }
                     try {
                         s.Run(2,jetPackFuel);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                     loopcount = 0;
+                    //reset de counter
                     client = s.fromclient;
                     analysejoystick();
                 }
@@ -126,7 +134,7 @@ public class GamePanel extends JPanel {
         // Offset tussen de platform generatie
         offset = 250;
         // We beginnen bij 0 voor differentiate, set in Platform & Fuel berekent hier mee
-
+        statusindicator = 1;
         differentiate = 0;
         score = 0;
         fuels.add(new Fuel(400, 400, 50, 50, player));
@@ -234,16 +242,20 @@ public class GamePanel extends JPanel {
 
     }
     public void analysejoystick() {
+        //Julian
+        //checkt of er uberhaupt data is
         if (!(client == null || client.isEmpty())) {
-            System.out.println("omfg");
             System.out.println(client.length());
+            //decode naar losse variabelen
             String[] parts = client.split(";");
+            // maakt ints van de geleverde strings
             x = Integer.parseInt(parts[0]);
             System.out.println(x);
             y = Integer.parseInt(parts[1]);
             System.out.println(y);
             enter = Integer.parseInt(parts[2]);
             System.out.println(enter);
+            //veranderd controll status
             if (y == 1 && player.canFly && jetPackFuel > 0) {
                 player.keyUp = true;
             }
@@ -264,32 +276,6 @@ public class GamePanel extends JPanel {
                 player.keyRestart = true;
             }
             else{player.keyRestart = false;}
-//            if (parts[1] == "1") {
-//                player.keyUp = true;
-//            } else {
-//                player.keyUp = false;
-//            }
-//            System.out.println("aaa");
-//            if (parts[1] == "-1") {
-//                player.keyDown = true;
-//            } else {
-//                player.keyDown = false;
-//            }
-//            if (parts[0] == "-1") {
-//                player.keyLeft = true;
-//            } else {
-//                player.keyLeft = false;
-//            }
-//            if (parts[0] == "1") {
-//                player.keyRight = true;
-//            } else {
-//                player.keyRight = false;
-//            }
-//            if (parts[3] == "1") {
-//                player.keyRestart = true;
-//            } else {
-//                player.keyRestart = false;
-//            }
             }
         else{
             System.out.println("sdf");
