@@ -7,8 +7,9 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class sggs {
-    static Socket s;
+//Gemaakt door Julian. Voor het testen van de controller.
+public class Sggs {
+
     static PrintWriter pw;
 
 

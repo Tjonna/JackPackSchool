@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Fuel {
+public class Fuel extends GenereerbaarObject {
 
     int x;
     int y;

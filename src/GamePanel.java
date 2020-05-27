@@ -33,6 +33,7 @@ public class GamePanel extends JPanel {
 
     boolean cantGenerateMorePlatforms;
 
+
     public GamePanel() throws InterruptedException {
         player = new Player(400, 0, this);
         loopcount=1;
@@ -41,6 +42,7 @@ public class GamePanel extends JPanel {
         gameTimer.schedule(new TimerTask() {
             @Override
             public void run() {
+                System.out.println("Amount of platforms: " + platforms.size());
                 // Jetpack fuel checken, het mag niet over de gestelde grenswaardes heen.
                 if (jetPackFuel > 150) {
                     jetPackFuel = 150;
@@ -69,9 +71,9 @@ public class GamePanel extends JPanel {
                     differentiate += 800;
                     for (Platform plat : platforms) plat.set(differentiate);
                     for (Fuel fuel : fuels) fuel.set(differentiate);
-                    for (int i = 0; i < platforms.size(); i++ ){
+                    for (int i = 0; i < platforms.size(); i++) {
                         // Zodat we geen problemen krijgen bij de verticale colissie
-                        if(platforms.get(i).hitBox.y -750 >= 20 && platforms.get(i).hitBox.y- 750 <= 50){
+                        if (platforms.get(i).hitBox.y - 750 >= 20 && platforms.get(i).hitBox.y - 750 <= 50) {
                             System.out.println("700!");
                             player.y = 700;
                         }
@@ -126,7 +128,7 @@ public class GamePanel extends JPanel {
         // We beginnen bij 0 voor differentiate, set in Platform & Fuel berekent hier mee
 
         differentiate = 0;
-
+        score = 0;
         fuels.add(new Fuel(400, 400, 50, 50, player));
         startTimer = System.currentTimeMillis();
 

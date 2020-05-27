@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
-public class Platform {
+public class Platform extends GenereerbaarObject {
 
     int x;
     int y;
