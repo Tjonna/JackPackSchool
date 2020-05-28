@@ -92,8 +92,8 @@ public class GamePanel extends JPanel {
                     }
                     try {
                         s.Run(2,jetPackFuel);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (IOException | NullPointerException e) {
+                        System.out.println("Er is geen controller verbonden!");
                     }
                     loopcount = 0;
                     //reset de counter
@@ -279,7 +279,7 @@ public class GamePanel extends JPanel {
             else{player.keyRestart = false;}
             }
         else{
-            System.out.println("sdf");
+            System.out.println("Er zijn geen inputs met de controller");
         }
     }
 

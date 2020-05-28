@@ -63,7 +63,6 @@ public class Server{
                 pw.flush();
                 status = "1";
             } catch (NullPointerException e) {
-                e.printStackTrace();
                 System.out.println("geen connectie");
             }
         }
