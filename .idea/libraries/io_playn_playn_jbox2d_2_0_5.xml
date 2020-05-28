@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="io.playn:playn-jbox2d:2.0.5" type="repository">
+    <properties maven-id="io.playn:playn-jbox2d:2.0.5" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/playn-jbox2d-2.0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jbox2d-library-2.2.1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/playn-core-2.0.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/pythagoras-1.4.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/react-1.5.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

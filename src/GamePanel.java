@@ -1,3 +1,4 @@
+import javax.print.DocFlavor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -14,21 +15,28 @@ public class GamePanel extends JPanel {
     Timer gameTimer;
     public static ArrayList<Platform> platforms = new ArrayList<>();
     ArrayList<Fuel> fuels = new ArrayList<>();
-
+    static Server s = new Server();
     int offset;
 
     long startTimer, currentTimer;
     int differentiate = 0;
-
+    int x;
+    int y;
+    int enter;
+    int statusindicator;
     int score;
     int jetPackFuel;
+    int loopcount;
+    String client = "0;0;0";
+
+
 
     boolean cantGenerateMorePlatforms;
 
 
     public GamePanel() {
         player = new Player(400, 0, this);
-
+        loopcount=1;
         resetGame();
         gameTimer = new Timer();
         gameTimer.schedule(new TimerTask() {
@@ -74,6 +82,27 @@ public class GamePanel extends JPanel {
                 }
 
 
+                //checkt of er al 10 frames voorbij zijn, om haperingen te voorkomen
+                //Julian
+                if(loopcount == 11) {
+                    //laat animatie afspelen als de speler restart of dood is
+                    if(statusindicator == 1) {
+                        Server.status = "0";
+                        statusindicator = 0;
+                    }
+                    try {
+                        s.Run(2,jetPackFuel);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    loopcount = 0;
+                    //reset de counter
+                    client = s.fromclient;
+                    analysejoystick();
+                }
+                else{
+                    loopcount+=1;
+                }
                 // Dit is de game loop
                 // De tijd in milliseconde bijhouden
                 currentTimer = System.currentTimeMillis() - startTimer;
@@ -105,7 +134,7 @@ public class GamePanel extends JPanel {
         // Offset tussen de platform generatie
         offset = 250;
         // We beginnen bij 0 voor differentiate, set in Platform & Fuel berekent hier mee
-
+        statusindicator = 1;
         differentiate = 0;
         score = 0;
         // Toch een begin brandstof zodat het nooit fout kan gaan en de makkelijkheid van een nieuwe speler!
@@ -213,6 +242,47 @@ public class GamePanel extends JPanel {
         }
 
     }
+    public void analysejoystick() {
+        //Julian
+        //checkt of er uberhaupt data is
+        if (!(client == null || client.isEmpty())) {
+            System.out.println(client.length());
+            //decode naar losse variabelen
+            String[] parts = client.split(";");
+            // maakt ints van de geleverde strings
+            x = Integer.parseInt(parts[0]);
+            System.out.println(x);
+            y = Integer.parseInt(parts[1]);
+            System.out.println(y);
+            enter = Integer.parseInt(parts[2]);
+            System.out.println(enter);
+            //veranderd controll status
+            if (y == 1 && player.canFly && jetPackFuel > 0) {
+                player.keyUp = true;
+            }
+            else{player.keyUp = false;}
+            if (y == -1) {
+                player.keyDown = true;
+            }
+            else{player.keyDown = false;}
+            if (x == 1) {
+                player.keyRight = true;
+            }
+            else{player.keyRight = false;}
+            if (x == -1) {
+                player.keyLeft = true;
+            }
+            else{player.keyLeft = false;}
+            if (enter == 1) {
+                player.keyRestart = true;
+            }
+            else{player.keyRestart = false;}
+            }
+        else{
+            System.out.println("sdf");
+        }
+    }
+
 
     public void keyReleased(KeyEvent e) {
         if (e.getKeyChar() == 'w') {
