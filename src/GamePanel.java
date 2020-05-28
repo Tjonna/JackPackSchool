@@ -26,7 +26,7 @@ public class GamePanel extends JPanel {
     boolean cantGenerateMorePlatforms;
 
 
-    public GamePanel() throws InterruptedException {
+    public GamePanel() {
         player = new Player(400, 0, this);
 
         resetGame();
@@ -34,7 +34,6 @@ public class GamePanel extends JPanel {
         gameTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Amount of platforms: " + platforms.size());
                 // Jetpack fuel checken, het mag niet over de gestelde grenswaardes heen.
                 if (jetPackFuel > 150) {
                     jetPackFuel = 150;
@@ -91,6 +90,7 @@ public class GamePanel extends JPanel {
     }
 
 
+    // Hier resetten we de game als de speler door is gegaan of op R heeft gedrukt.
     public void resetGame() {
         player.x = 400;
         player.y = 800;
@@ -108,6 +108,7 @@ public class GamePanel extends JPanel {
 
         differentiate = 0;
         score = 0;
+        // Toch een begin brandstof zodat het nooit fout kan gaan en de makkelijkheid van een nieuwe speler!
         fuels.add(new Fuel(400, 400, 50, 50, player));
         startTimer = System.currentTimeMillis();
 

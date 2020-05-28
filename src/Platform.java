@@ -13,7 +13,7 @@ public class Platform extends GenereerbaarObject {
     int height;
     int startY;
 
-    boolean hasFuel = false;
+    boolean hasFuel;
 
     Player player;
 

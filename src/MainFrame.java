@@ -5,7 +5,7 @@ public class MainFrame extends JFrame {
 
     private GamePanel gamePanel = new GamePanel();
 
-    public MainFrame(int breedte, int hoogte) throws InterruptedException {
+    public MainFrame(int breedte, int hoogte) {
 
         // Zodra de game gesloten wordt door op het kruisje te drukken, gaat t script ook uit, die blijft dus niet door runnen als de JFrame weg is
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

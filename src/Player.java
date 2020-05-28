@@ -31,7 +31,7 @@ public class Player {
 
     BufferedImage image;
 
-    // Locatie van de speler en de panel waar hij geprojecteerd op moet owrden
+    // Locatie van de speler en de panel waar hij geprojecteerd op moet worden
     public Player(int x, int y, GamePanel panel) {
         this.panel = panel;
         this.x = x;
@@ -171,12 +171,9 @@ public class Player {
         Font f = new Font("Arial", Font.BOLD, 20);
         g.setFont(f);
         g.setColor(Color.BLACK);
-        // g.drawString("Camera Y: " + panel.cameraY, 100, 100);
-        // g.drawString("Camera Y Speed: " + panel.cameraYspeed, 100, 125);
-        g.drawString("Player Y: " + y, 100, 150);
-        g.drawString("Player X: " + x, 100, 170);
-        g.drawString("Score: " + panel.score, 100, 190);
-        g.drawString("Fuel: " + panel.jetPackFuel, 100, 210);
+
+        g.drawString("Score: " + panel.score, 50, 100);
+        g.drawString("Fuel: " + panel.jetPackFuel, 50, 120);
 
 
     }
